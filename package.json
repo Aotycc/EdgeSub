@@ -20,7 +20,7 @@
     "generate-password": "^1.7.1",
     "ini": "^5.0.0",
     "js-sha256": "^0.11.0",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.1",
     "sass": "^1.85.1"
   },
   "devDependencies": {

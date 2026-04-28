@@ -76,6 +76,7 @@
   | Hysteria 1   | ✅    | ✅        |                                       |
   | Hysteria 2   | ✅    | ✅        |                                       |
   | TUIC v5      | ✅    | ✅        |                                       |
+  | AnyTLS       | ✅    | ✅        | 支援 Clash Meta / Sing-Box / ShareLink 三種格式互轉 |
   | Vmess        | ✅    | ☑️        | 未經完全測試                          |
   | Vless        | ✅    | ☑️        | 未經完全測試                          |
   | Shadowsocks  | ✅    | ✅        | 全局設定為開啓 SS UoT 时會開啓 UDP over TCP |
@@ -105,4 +106,37 @@
   - **內部除錯用格式**: 
   
     僅供除錯, 將會在未來的任意某個時間點做出破壞性改動或刪除.
+
+
+## 更新日誌
+
+### AnyTLS 協議支援
+
+新增對 AnyTLS 協議的完整支援，覆蓋三種輸入/輸出格式：
+
+- **Clash Meta YAML**: `type: anytls` 節點可正常解析與輸出
+- **Sing-Box JSON**: `"type": "anytls"` outbound 可正常解析與輸出
+- **ShareLink**: 支援 `anytls://password@host:port/?sni=...&insecure=1#name` 格式
+
+支援的字段:
+
+| 字段                         | Clash Meta                     | Sing-Box                          | ShareLink Query     |
+| ---------------------------- | ------------------------------ | --------------------------------- | ------------------- |
+| 密碼                         | `password`                     | `password`                        | userinfo            |
+| SNI                          | `sni`                          | `tls.server_name`                 | `sni`               |
+| ALPN                         | `alpn` (列表)                  | `tls.alpn` (列表)                 | `alpn` (逗號分隔)   |
+| 客戶端指紋                   | `client-fingerprint`           | `tls.utls.fingerprint`            | `fp`                |
+| 跳過證書驗證                 | `skip-cert-verify`             | `tls.insecure`                    | `insecure`          |
+| Idle Session 檢查間隔        | `idle-session-check-interval`  | `idle_session_check_interval` (帶 `s` 字尾) | `idle-session-check-interval` |
+| Idle Session 超時            | `idle-session-timeout`         | `idle_session_timeout` (帶 `s` 字尾)        | `idle-session-timeout`        |
+| 最小 Idle Session 數         | `min-idle-session`             | `min_idle_session`                | `min-idle-session`  |
+
+實現位置:
+
+- `functions/internal/Parsers/clash-meta.js` - Clash Meta YAML 解析
+- `functions/internal/Parsers/sing-box.js` - Sing-Box JSON 解析
+- `functions/internal/Parsers/share-link.js` - 分享鏈接解析
+- `functions/internal/Dumpers/clash-meta.ts` - Clash Meta YAML 輸出
+- `functions/internal/Dumpers/sing-box.js` - Sing-Box JSON 輸出
+- `functions/internal/Dumpers/share-link.js` - 分享鏈接輸出
 

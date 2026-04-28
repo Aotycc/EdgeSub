@@ -178,6 +178,20 @@ export class ShareLinkParser {
 
     }
 
+    anytls (URI) {
+        let URIObject = new URL(URI);
+
+        const ANYTLS = {
+            __Type: "anytls",
+            __Remark: decodeURIComponent(URIObject.hash.replace(/^#/, "")) || URIObject.host,
+            Auth: decodeURIComponent(URIObject.password || URIObject.username),
+            Hostname: URIObject.hostname,
+            Port: parseInt(URIObject.port),
+            Query: __searchParamsMapper(URIObject.searchParams)
+        }
+        return ANYTLS;
+    }
+
     trojan (URI) {
         let URIObject = new URL(URI);
 

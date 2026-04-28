@@ -65,6 +65,9 @@ export class ShareLinkDumper {
     ss (Obj) {
         return `ss://${encodeURIComponent(btoa(`${Obj.Auth.cipher}:${Obj.Auth.password}`))}@${Obj.Hostname}:${Obj.Port}/#${encodeURIComponent(Obj.__Remark)}`
     }
+    anytls (Obj) {
+        return `anytls://${encodeURIComponent(Obj.Auth)}@${Obj.Hostname}:${Obj.Port}/?${URLQueryWrapper(Obj.Query)}#${encodeURIComponent(Obj.__Remark)}`
+    }
     trojan (Obj) {
         return `trojan://${Obj.Auth}@${Obj.Hostname}:${Obj.Port}/?${URLQueryWrapper(Obj.Query)}#${encodeURIComponent(Obj.__Remark)}`
     }

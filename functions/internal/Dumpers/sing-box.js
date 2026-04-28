@@ -240,6 +240,36 @@ export default class Dumper {
             } : false,
         }
     }
+    anytls (ANYTLS) {
+        return {
+            type: "anytls",
+            tag: ANYTLS.__Remark,
+
+            server: ANYTLS.Hostname,
+            server_port: ANYTLS.Port,
+            password: ANYTLS.Auth,
+
+            idle_session_check_interval: ANYTLS.Query["idle-session-check-interval"]
+                ? `${ANYTLS.Query["idle-session-check-interval"]}s`
+                : undefined,
+            idle_session_timeout: ANYTLS.Query["idle-session-timeout"]
+                ? `${ANYTLS.Query["idle-session-timeout"]}s`
+                : undefined,
+            min_idle_session: ANYTLS.Query["min-idle-session"],
+
+            tls: {
+                enabled: true,
+                server_name: ANYTLS.Query.sni,
+                insecure: this.config.SkipCertVerify,
+                alpn: ANYTLS.Query.alpn ? ANYTLS.Query.alpn.split(",") : undefined,
+                utls: ANYTLS.Query.fp ? {
+                    enabled: true,
+                    fingerprint: ANYTLS.Query.fp
+                } : undefined,
+            }
+        }
+    }
+
     trojan (TROJAN) {
         return {
 

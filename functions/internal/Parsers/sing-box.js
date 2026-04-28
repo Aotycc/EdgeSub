@@ -150,6 +150,25 @@ export class SingBoxParser {
         }
     }
 
+    anytls (Obj) {
+        return {
+            __Type: "anytls",
+            __Remark: Obj.tag,
+            Hostname: Obj.server,
+            Port: Obj.server_port,
+            Auth: Obj.password,
+            Query: {
+                sni: Obj.tls && Obj.tls.server_name,
+                alpn: Obj.tls && Obj.tls.alpn ? Obj.tls.alpn.join(",") : undefined,
+                fp: Obj.tls && Obj.tls.utls && Obj.tls.utls.enabled ? Obj.tls.utls.fingerprint : undefined,
+                insecure: Obj.tls && Obj.tls.insecure ? 1 : 0,
+                "idle-session-check-interval": Obj.idle_session_check_interval ? parseInt(String(Obj.idle_session_check_interval).replace(/s$/, "")) : undefined,
+                "idle-session-timeout": Obj.idle_session_timeout ? parseInt(String(Obj.idle_session_timeout).replace(/s$/, "")) : undefined,
+                "min-idle-session": Obj.min_idle_session,
+            }
+        }
+    }
+
     shadowsocks (Obj) {
         return {
             __Type: "ss",

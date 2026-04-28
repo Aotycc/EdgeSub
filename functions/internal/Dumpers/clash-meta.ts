@@ -221,6 +221,24 @@ export default class Dumper {
             // udp: true,
         }
     }
+    anytls (ANYTLS) {
+        return {
+            name: ANYTLS.__Remark,
+            type: "anytls",
+            server: ANYTLS.Hostname,
+            port: ANYTLS.Port,
+            password: ANYTLS.Auth,
+            sni: ANYTLS.Query.sni,
+            alpn: ANYTLS.Query.alpn ? ANYTLS.Query.alpn.split(",") : undefined,
+            "client-fingerprint": ANYTLS.Query.fp || this.config.ClientFingerprint,
+            "idle-session-check-interval": ANYTLS.Query["idle-session-check-interval"],
+            "idle-session-timeout": ANYTLS.Query["idle-session-timeout"],
+            "min-idle-session": ANYTLS.Query["min-idle-session"],
+            udp: this.config.UDP,
+            "skip-cert-verify": this.config.SkipCertVerify,
+        }
+    }
+
     trojan (TROJAN) {
         return {
             name: TROJAN.__Remark,
