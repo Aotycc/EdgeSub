@@ -110,13 +110,18 @@
 
 ## 更新日誌
 
-### AnyTLS 協議支援
+### AnyTLS 協議支援 + 兼容性修復
 
 新增對 AnyTLS 協議的完整支援，覆蓋三種輸入/輸出格式：
 
 - **Clash Meta YAML**: `type: anytls` 節點可正常解析與輸出
 - **Sing-Box JSON**: `"type": "anytls"` outbound 可正常解析與輸出
 - **ShareLink**: 支援 `anytls://password@host:port/?sni=...&insecure=1#name` 格式
+
+同時修復了兩個相關 Bug：
+
+1. **`/sub/clash` 端點的協議白名單過時**: 舊版白名單只包含 `trojan/vmess/ss/ssr/http/socks5`，會把 anytls/hysteria/hysteria2/tuic/vless 等現代協議全部過濾掉。已擴展白名單以包含這些協議。
+2. **Trojan 解析器丟失 `client-fingerprint`**: 原 `clash-meta.js` 的 trojan 解析方法未保留 `client-fingerprint` 字段，導致輸出時該字段消失。已修復。
 
 支援的字段:
 
@@ -131,12 +136,13 @@
 | Idle Session 超時            | `idle-session-timeout`         | `idle_session_timeout` (帶 `s` 字尾)        | `idle-session-timeout`        |
 | 最小 Idle Session 數         | `min-idle-session`             | `min_idle_session`                | `min-idle-session`  |
 
-實現位置:
+修改的文件:
 
-- `functions/internal/Parsers/clash-meta.js` - Clash Meta YAML 解析
-- `functions/internal/Parsers/sing-box.js` - Sing-Box JSON 解析
-- `functions/internal/Parsers/share-link.js` - 分享鏈接解析
-- `functions/internal/Dumpers/clash-meta.ts` - Clash Meta YAML 輸出
-- `functions/internal/Dumpers/sing-box.js` - Sing-Box JSON 輸出
-- `functions/internal/Dumpers/share-link.js` - 分享鏈接輸出
+- `functions/sub/clash-meta.js` - 擴展 `/sub/clash` 端點的協議白名單
+- `functions/internal/Parsers/clash-meta.js` - 新增 anytls 解析；修復 trojan 解析丟失 `client-fingerprint`
+- `functions/internal/Parsers/sing-box.js` - 新增 anytls 解析
+- `functions/internal/Parsers/share-link.js` - 新增 anytls 解析
+- `functions/internal/Dumpers/clash-meta.ts` - 新增 anytls 輸出
+- `functions/internal/Dumpers/sing-box.js` - 新增 anytls 輸出
+- `functions/internal/Dumpers/share-link.js` - 新增 anytls 輸出
 

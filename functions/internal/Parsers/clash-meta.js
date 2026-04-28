@@ -196,6 +196,7 @@ export class ClashMetaParser {
             Query: {
                 type: Obj.network,
                 sni: Obj.sni,
+                fp: Obj["client-fingerprint"],
 
                 // reality
                 security: !!Obj["reality-opts"] ? "reality" : undefined,
